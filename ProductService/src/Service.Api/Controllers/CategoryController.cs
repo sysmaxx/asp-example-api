@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Service.Abstractions.Services;
 
 namespace Service.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class CategoryController(ILogger<CategoryController> logger) : ControllerBase
+public class CategoryController : ControllerBase
 {
-    private readonly ILogger<CategoryController> _logger = logger;
+    public CategoryController(ILogger<CategoryController> logger) => _logger = logger;
+
+    private readonly ILogger<CategoryController> _logger;
 
     [HttpGet]
     public async Task<ActionResult> GetCategories(

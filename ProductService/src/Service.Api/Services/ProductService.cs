@@ -6,12 +6,18 @@ using Service.Api.Mapper;
 
 namespace Service.Api.Services;
 
-public class ProductService(
-    ILogger<ProductService> logger,
-    ProductDbContext productDbContext) : IProductService
+public class ProductService : IProductService
 {
-    private readonly ILogger<ProductService> _logger = logger;
-    private readonly ProductDbContext _productDbContext = productDbContext;
+    private readonly ILogger<ProductService> _logger;
+    private readonly ProductDbContext _productDbContext;
+
+    public ProductService(
+    ILogger<ProductService> logger,
+    ProductDbContext productDbContext)
+    {
+        _logger = logger;
+        _productDbContext = productDbContext;
+    }
 
     public async Task<IEnumerable<ProductDto>> GetProductsAsync(CancellationToken cancellationToken)
     {
@@ -22,5 +28,4 @@ public class ProductService(
 
         return products.Select(product => product.ToProductDto());
     }
-
 }

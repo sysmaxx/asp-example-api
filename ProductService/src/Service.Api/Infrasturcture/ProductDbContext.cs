@@ -3,8 +3,12 @@ using Service.Abstractions.Models;
 
 namespace Service.Api.Infrasturcture;
 
-public class ProductDbContext(DbContextOptions<ProductDbContext> options) : DbContext(options)
+public class ProductDbContext : DbContext
 {
+    public ProductDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     public DbSet<Product> Products { get; set; }
     public DbSet<Category> Categories { get; set; }
 

@@ -6,12 +6,18 @@ using Service.Api.Mapper;
 
 namespace Service.Api.Services;
 
-public class CategoryService(
-           ILogger<CategoryService> logger,
-           ProductDbContext productDbContext) : ICategoryService
+public class CategoryService : ICategoryService
 {
-    private readonly ILogger<CategoryService> _logger = logger;
-    private readonly ProductDbContext _productDbContext = productDbContext;
+    private readonly ILogger<CategoryService> _logger;
+    private readonly ProductDbContext _productDbContext;
+
+    public CategoryService(
+           ILogger<CategoryService> logger,
+           ProductDbContext productDbContext)
+    {
+        _logger = logger;
+        _productDbContext = productDbContext;
+    }
 
     public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync(CancellationToken cancellationToken)
     {

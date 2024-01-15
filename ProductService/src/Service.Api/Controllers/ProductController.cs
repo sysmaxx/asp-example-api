@@ -5,13 +5,15 @@ namespace Service.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ProductController(ILogger<ProductController> logger) : ControllerBase
+public class ProductController : ControllerBase
 {
-    private readonly ILogger<ProductController> _logger = logger;
+    private readonly ILogger<ProductController> _logger;
+
+    public ProductController(ILogger<ProductController> logger) => _logger = logger;
 
     [HttpGet]
     public async Task<ActionResult> GetProducts(
-        [FromServices] IProductService _productService, 
+        [FromServices] IProductService _productService,
         CancellationToken cancellationToken)
     {
         try
