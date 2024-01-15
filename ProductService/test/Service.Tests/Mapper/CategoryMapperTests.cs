@@ -1,6 +1,6 @@
 ﻿using Service.Abstractions.Models;
-using Xunit;
 using Service.Api.Mapper;
+using Xunit;
 
 namespace Service.Tests.Mapper;
 public class CategoryMapperTests

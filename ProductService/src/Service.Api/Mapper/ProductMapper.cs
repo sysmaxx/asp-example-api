@@ -7,6 +7,11 @@ public static class ProductMapper
 {
     public static ProductDto ToProductDto(this Product product)
     {
+        if (product is null)
+        {
+            throw new ArgumentNullException(nameof(product));
+        }
+
         return new ProductDto
         {
             Id = product.Id,
