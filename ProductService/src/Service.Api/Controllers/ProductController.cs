@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Abstractions.Dtos;
 using Service.Abstractions.Services;
 
 namespace Service.Api.Controllers;
@@ -12,7 +13,7 @@ public class ProductController : ControllerBase
     public ProductController(ILogger<ProductController> logger) => _logger = logger;
 
     [HttpGet]
-    public async Task<ActionResult> GetProducts(
+    public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts(
         [FromServices] IProductService _productService,
         CancellationToken cancellationToken)
     {

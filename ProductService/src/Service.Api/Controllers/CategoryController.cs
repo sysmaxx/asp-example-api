@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Abstractions.Dtos;
 using Service.Abstractions.Services;
 
 namespace Service.Api.Controllers;
@@ -11,7 +12,7 @@ public class CategoryController : ControllerBase
     private readonly ILogger<CategoryController> _logger;
 
     [HttpGet]
-    public async Task<ActionResult> GetCategories(
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
         [FromServices] ICategoryService categoryService,
         CancellationToken cancellationToken)
     {
