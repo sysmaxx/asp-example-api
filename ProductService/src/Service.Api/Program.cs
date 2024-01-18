@@ -5,6 +5,20 @@ using Service.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add Cors
+var corsPolicyName = "allowAnyCors";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: corsPolicyName,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin();
+                          policy.AllowAnyHeader();
+                          policy.AllowAnyMethod();
+                      });
+});
+
+
 // Add services to the container.
 builder.Services.AddDbContext<ProductDbContext>(options =>
         options.UseInMemoryDatabase("MyInMemoryDb"));
@@ -33,6 +47,8 @@ using (var scope = app.Services.CreateScope())
     var dbContext = services.GetRequiredService<ProductDbContext>();
     dbContext.SeedData();
 }
+
+app.UseCors(corsPolicyName);
 
 app.UseHttpsRedirection();
 
