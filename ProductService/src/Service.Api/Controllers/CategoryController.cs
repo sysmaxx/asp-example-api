@@ -3,7 +3,7 @@ using Service.Abstractions.Dtos;
 using Service.Abstractions.Services;
 
 namespace Service.Api.Controllers;
-[Route("api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class CategoryController : ControllerBase
 {
@@ -11,7 +11,14 @@ public class CategoryController : ControllerBase
 
     private readonly ILogger<CategoryController> _logger;
 
-    [HttpGet]
+    /// <summary>
+    /// Get all categories
+    /// </summary>
+    /// <param name="categoryService"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpGet("Categories")]
+    [EndpointDescription("Get all categories")]
     public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
         [FromServices] ICategoryService categoryService,
         CancellationToken cancellationToken)

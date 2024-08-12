@@ -19,11 +19,33 @@ public class ProductService : IProductService
         _productDbContext = productDbContext;
     }
 
+    /// <summary>
+    /// Get all products
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     public async Task<IEnumerable<ProductDto>> GetProductsAsync(CancellationToken cancellationToken)
     {
         var products = await _productDbContext
             .Products
             .Include(p => p.Category)
+            .ToListAsync(cancellationToken);
+
+        return products.Select(product => product.ToProductDto());
+    }
+
+    /// <summary>
+    /// Get products filterd by category
+    /// </summary>
+    /// <param name="categoryId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<ProductDto>> GetProductsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
+    {
+        var products = await _productDbContext
+            .Products
+            .Include(p => p.Category)
+            .Where(p => p.Category.Id == categoryId)
             .ToListAsync(cancellationToken);
 
         return products.Select(product => product.ToProductDto());

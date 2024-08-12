@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Service.Abstractions.Models;
@@ -40,7 +41,8 @@ public class ProductServiceTests
                 CategoryId = Guid.NewGuid(),
                 Category = new Category { Id = Guid.NewGuid(), Name = "Category2" }
             });
-            context.SaveChanges();
+            
+            await context.SaveChangesAsync();
         }
 
         var dbContext = new ProductDbContext(dbContextOptions);
@@ -49,6 +51,71 @@ public class ProductServiceTests
 
         // Act
         var products = await productService.GetProductsAsync(cancellationToken);
+
+        // Assert
+        Assert.NotNull(products);
+        Assert.Equal(2, products.Count());
+    }
+
+    [Fact]
+    public async Task GetProductsByCategoryIdAsync_ReturnsProductDtos()
+    {
+        // Arrange
+        var categoryId = Guid.NewGuid();
+        var categoryNotExpectedId = Guid.NewGuid();
+
+        var cancellationToken = CancellationToken.None;
+
+        var dbContextOptions = new DbContextOptionsBuilder<ProductDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        // Populate the in-memory database with test data
+        using (var context = new ProductDbContext(dbContextOptions))
+        {
+            var category = new Category { Id = categoryId, Name = "Category1" };
+            var categoryNotExpected = new Category { Id = categoryNotExpectedId, Name = "Category2" };
+
+            context.Categories.Add(category);
+            context.Categories.Add(categoryNotExpected);
+
+            context.Products.Add(new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = "Product1",
+                Description = "Description1",
+                Price = 10.0,
+                Category = category
+            });
+
+            context.Products.Add(new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = "Product2",
+                Description = "Description2",
+                Price = 10.0,
+
+                Category = category
+            });
+
+            context.Products.Add(new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = "Product3",
+                Description = "Description3",
+                Price = 30.0,
+                Category = categoryNotExpected
+            });
+            
+            await context.SaveChangesAsync();
+        }
+
+        var dbContext = new ProductDbContext(dbContextOptions);
+        var logger = Substitute.For<ILogger<ProductService>>();
+        var productService = new ProductService(logger, dbContext);
+
+        // Act
+        var products = await productService.GetProductsByCategoryIdAsync(categoryId, cancellationToken);
 
         // Assert
         Assert.NotNull(products);
