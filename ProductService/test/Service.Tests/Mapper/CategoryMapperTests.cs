@@ -14,7 +14,9 @@ public class CategoryMapperTests
         {
             Id = Guid.NewGuid(),
             Name = "Electronics",
+            Created = DateTime.Now,
             Description = "All electronic items"
+            
         };
 
         // Act
@@ -24,6 +26,7 @@ public class CategoryMapperTests
         Assert.NotNull(result);
         Assert.Equal(category.Id, result.Id);
         Assert.Equal(category.Name, result.Name);
+        Assert.Equal(category.Created, result.Created);
         Assert.Equal(category.Description, result.Description);
     }
 

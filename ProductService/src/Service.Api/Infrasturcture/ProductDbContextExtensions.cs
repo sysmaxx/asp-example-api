@@ -7,25 +7,37 @@ public static class ProductDbContextExtensions
     {
         if (!context.Products.Any())
         {
-            var smartphoneCategory = new Category { Name = "Smartphones", Description = "Category of Smartphones" };
-            var laptopCategory = new Category { Name = "Laptops", Description = "Category of Laptops" };
+            var sweetsCategory = new Category { Name = "Süßwaren", Description = "Leckere Snacks und Süßigkeiten.", Created = GenerateRandomDateTimeOffset(new DateTime(2022, 07, 01), DateTime.Now) };
+            var cigarettesCategory = new Category { Name = "Zigaretten", Description = "Verschiedene Tabakprodukte.", Created = GenerateRandomDateTimeOffset(new DateTime(2022, 07, 01), DateTime.Now) };
+            var alcoholCategory = new Category { Name = "Alkohol", Description = "Verschiedene alkoholische Getränke.", Created = GenerateRandomDateTimeOffset(new DateTime(2022, 07, 01), DateTime.Now) };
 
-            context.Categories.AddRange(smartphoneCategory, laptopCategory);
+            context.Categories.AddRange(sweetsCategory, cigarettesCategory, alcoholCategory);
             context.SaveChanges();
 
             var products = new List<Product>
             {
-                new() { Name = "iPhone 13", Description = "Apple iPhone 13 with 128GB storage", Category = smartphoneCategory, Price = 999.99, IsEnable = true },
-                new() { Name = "Samsung Galaxy S21", Description = "Samsung Galaxy S21 with 256GB storage",  Category = smartphoneCategory, Price = 899.99, IsEnable = true },
-                new() { Name = "Google Pixel 6", Description = "Google Pixel 6 with 128GB storage",  Category = smartphoneCategory, Price = 799.99, IsEnable = true },
-                new() { Name = "OnePlus 9", Description = "OnePlus 9 with 256GB storage", Category = smartphoneCategory, Price = 699.99, IsEnable = true },
-                new() { Name = "Dell XPS 15", Description = "Dell XPS 15 with 16GB RAM and 512GB SSD", Category = laptopCategory, Price = 1500.99, IsEnable = true },
-                new() { Name = "MacBook Pro 14", Description = "Apple MacBook Pro 14 with M1 chip", Category = laptopCategory, Price = 1999.99, IsEnable = true },
-                new() { Name = "Lenovo ThinkPad X1 Carbon", Description = "Lenovo ThinkPad X1 Carbon with 16GB RAM and 1TB SSD", Category = laptopCategory, Price = 1400.99, IsEnable = true }
+                new() { Name = "Schokolade", Description = "Vollmilchschokolade, 100g", Category = sweetsCategory, Price = 1.50, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) },
+                new() { Name = "Gummibärchen", Description = "Bunte Fruchtgummis, 200g", Category = sweetsCategory, Price = 1.20, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) },
+                new() { Name = "Marlboro", Description = "Marlboro Red, 20 Stk.", Category = cigarettesCategory, Price = 7.00, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) },
+                new() { Name = "Lucky Strike", Description = "Lucky Strike Original, 20 Stk.", Category = cigarettesCategory, Price = 6.50, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) },
+                new() { Name = "Bier", Description = "Lagerbier, 500ml", Category = alcoholCategory, Price = 1.00, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) },
+                new() { Name = "Wein", Description = "Rotwein, 750ml", Category = alcoholCategory, Price = 5.00, IsEnable = true, Created = GenerateRandomDateTimeOffset(new DateTime(2022,07,01), DateTime.Now) }
             };
 
             context.Products.AddRange(products);
             context.SaveChanges();
         }
+    }
+
+    public static DateTimeOffset GenerateRandomDateTimeOffset(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        if (startDate > endDate)
+            throw new ArgumentException("Start date must be earlier than end date.");
+
+        var random = new Random();
+        var range = endDate - startDate;
+        var randomTimeSpan = new TimeSpan((long)(random.NextDouble() * range.Ticks));
+
+        return startDate + randomTimeSpan;
     }
 }

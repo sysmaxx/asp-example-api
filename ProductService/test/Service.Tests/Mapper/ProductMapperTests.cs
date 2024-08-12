@@ -16,6 +16,7 @@ public class ProductMapperTests
             Name = "Test Product",
             Description = "Test Description",
             Price = 19.99,
+            Created = DateTime.Now,
             Category = new Category
             {
                 Name = "TestCategory"
@@ -31,6 +32,7 @@ public class ProductMapperTests
         Assert.Equal(product.Name, productDto.Name);
         Assert.Equal(product.Description, productDto.Description);
         Assert.Equal(product.Price, productDto.Price);
+        Assert.Equal(product.Created, productDto.Created);
         Assert.Equal(product.Category.Name, productDto.CategoryName);
     }
 

@@ -16,6 +16,7 @@ public static class CategoryMapper
         {
             Id = category.Id,
             Name = category.Name,
+            Created = category.Created,
             Description = category.Description
         };
     }
